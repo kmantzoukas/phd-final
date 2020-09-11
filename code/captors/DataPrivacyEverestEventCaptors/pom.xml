@@ -1,0 +1,111 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>uk.ac.city</groupId>
+    <artifactId>DataPrivacyEverestEventCaptors</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0</version>
+    <name>DataPrivacyEverestEventCaptors</name>
+    <url>http://maven.apache.org</url>
+    <properties>
+        <!-- Make sure that the code is compiled with Java 8 support -->
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <!-- Define the filename of the final jar file produced after the agent has been built -->
+        <agent.jar.name>DataPrivacyEverestEventCaptors.jar</agent.jar.name>
+        <!-- Define the Username of the user that will be used to ssh to the nodes of the cluster and scp the agent jar with the relevant
+         configuration files -->
+        <remote.username>abfc149</remote.username>
+        <!-- Define the remote location where the agent jar files will be scp'ed -->
+        <event.captors.dir>toreador-demo/captors</event.captors.dir>
+        <!-- Define the remote location where the configuration files of the agent will be scp'ed -->
+        <event.captors.config.dir>toreador-demo/config/privacy</event.captors.config.dir>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_2.11</artifactId>
+            <version>2.3.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.7.11</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rabbitmq</groupId>
+            <artifactId>amqp-client</artifactId>
+            <version>5.5.0</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <attach></attach>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                    <finalName>DataPrivacyEverestEventCaptors</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.21.0</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <profiles>
+        <!-- Ubuntu profile used when building the project on Ubuntu -->
+        <profile>
+            <id>remote</id>
+            <properties>
+                <keyfile.path>/home/abfc149/.ssh/id_rsa</keyfile.path>
+            </properties>
+        </profile>
+        <!-- Windows profile when building the project on Windows 10. This profile is the default profile -->
+        <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <keyfile.path>C:\Users\konstantinos\.ssh\id_rsa</keyfile.path>
+            </properties>
+        </profile>
+    </profiles>
+</project>
