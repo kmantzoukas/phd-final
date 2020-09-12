@@ -12,7 +12,7 @@ object PrepareData {
 
   def main(args: Array[String]) {
 
-    val input = spark.sparkContext.textFile("hdfs://10.207.1.102:54310/output/output-1",8)
+    val input = spark.sparkContext.textFile("gs://dataproc-staging-us-central1-658776204196-yztfnikr/output/output-1",8)
     
     input
     .flatMap({
@@ -27,7 +27,7 @@ object PrepareData {
 
           List(refrigerator,stove,kettle,television,heater).toList
     })
-    .saveAsTextFile("hdfs://10.207.1.102:54310/output/output-2")
+    .saveAsTextFile("gs://dataproc-staging-us-central1-658776204196-yztfnikr/output/output-2")
 
     spark.stop
   }
