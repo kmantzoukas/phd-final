@@ -1,20 +1,16 @@
 #!/bin/bash
-captors=/media/konstantinos/Windows/Users/Administrator/phd-final/code/captors
-instances=($(gcloud compute instances list --filter=spark-$numOfNodes | awk '{print $1}' | tail -n +2))
-user=root
-bdaservices=/media/konstantinos/Windows/Users/Administrator/phd-final/code
-home=/home/kmantzoukas
-gsbucketurl=gs://dataproc-staging-us-central1-658776204196-yztfnikr
 
 # Default paramters
-createCluster=false
-numOfNodes=0
-copyCaptors=false
-copyServices=false
-copyCaptors=false
+rootFolder=/home/konstantinos/phd-final
+bucket=gs://dataproc-staging-us-central1-658776204196-yztfnikr
+workers=0
 
-# Create Spark cluster of certain size i.e. number of worker nodes
-function createSparkCluster() {
+isClusterDefined=false
+isUploadCaptorsDefined=false
+isUploadServicesDefined=false
+
+# Create Spark cluster of certain size i.e. with a specific number of worker nodes
+function cluster() {
 	gcloud dataproc clusters create spark-$1 \
 	--region us-central1 \
 	--subnet default \
@@ -29,25 +25,46 @@ function createSparkCluster() {
 }
 
 # Upload Big Data services (jars) binaries
-function uploadBigDataServices() {
-	gsutil cp $1/AnonymizeData/target/scala-2.11/anonymizedata_2.11-0.1.0-SNAPSHOT.jar $2/bda-services/
-	gsutil cp $1/PrepareData/target/scala-2.11/preparedata_2.11-0.1.0-SNAPSHOT.jar $2/bda-services/
-	gsutil cp $1/ComputeAverages/target/scala-2.11/computeaverage_2.11-0.1-SNAPSHOT.jar $2/bda-services/
+function services() {
+
+	if [ ! -d "$1/code/AnonymizeData/target/scala-2.11" ]; then
+	    cd $1/code/AnonymizeData && sbt clean package
+	fi
+
+	if [ ! -d "$1/code/PrepareData/target/scala-2.11" ]; then
+	    cd $1/code/PrepareData && sbt clean package
+	fi
+
+	if [ ! -d "$1/code/ComputeAverages/target/scala-2.11" ]; then
+	    cd $1/code/ComputeAverages && sbt clean package
+	fi
+	
+	gsutil cp $1/code/AnonymizeData/target/scala-2.11/anonymizedata_*.jar $2/bda-services/
+	gsutil cp $1/code/PrepareData/target/scala-2.11/preparedata_*.jar $2/bda-services/
+	gsutil cp $1/code/ComputeAverages/target/scala-2.11/computeaverage_*.jar $2/bda-services/
 }
 
 #  Upload event captors to the cluster's nodes
-function uploadEventCaptors() {
+function captors() {
 	
-	for instance in "${instances[@]}"
+	for instance in $3
 	do
-		echo -e "\nCreating folder $instance@/home/kmantzoukas/captors"
 		gcloud compute ssh root@$instance --command='mkdir /home/kmantzoukas/captors' --zone us-central1-f
-		echo -e "\nCopying data integrity event captor on $instance"
-		gcloud compute scp $1/DataIntegrityEverestEventCaptors/target/DataIntegrityEverestEventCaptors.jar $user@$instance:$2/captors --zone us-central1-f
-		echo -e "\nCopying data availability event captor"
-		gcloud compute scp $1/DataAvailabilityEverestEventCaptors/target/DataAvailabilityEverestEventCaptors.jar $user@$instance:$2/captors --zone us-central1-f
-		echo -e "\nCopying data privacy event captor"
-		gcloud compute scp $1/DataPrivacyEverestEventCaptors/target/DataPrivacyEverestEventCaptors.jar $user@$instance:$2/captors --zone us-central1-f
+				
+		gcloud compute scp \
+		$1/DataIntegrityEverestEventCaptors/target/DataIntegrityEverestEventCaptors.jar \
+		root@$instance:$2/captors \
+		--zone us-central1-f
+		
+		gcloud compute scp \
+		$1/DataAvailabilityEverestEventCaptors/target/DataAvailabilityEverestEventCaptors.jar \
+		root@$instance:$2/captors \
+		--zone us-central1-f
+
+		gcloud compute scp \
+		$1/DataPrivacyEverestEventCaptors/target/DataPrivacyEverestEventCaptors.jar \
+		root@$instance:$2/captors \
+		--zone us-central1-f
 	done
 }
 
@@ -55,29 +72,30 @@ for arg in "$@"
 do
     case $arg in
         --cluster)
-		numOfNodes=$2
-        createCluster=true
+		workers=$2
+		instances=($(gcloud compute instances list --filter=spark-$workers | awk '{print $1}' | tail -n +2))
+        isClusterDefined=true
+        shift
+        ;;
+        --services)
+        isUploadServicesDefined=true
         shift
         ;;
         --captors)
-        copyCaptors=true
-        shift
-        ;;
-        --bda)
-        copyServices=true
+        isUploadCaptorsDefined=true
         shift
         ;;
     esac
 done
 
-if $createCluster ; then 
-	createSparkCluster $numOfNodes 
+if $isClusterDefined ; then 
+	cluster $workers 
 fi
 
-if $copyServices; then 
-	uploadBigDataServices $bdaservices $gsbucketurl 
+if $isUploadServicesDefined; then 
+	services $rootFolder $bucket 
 fi
 
-if $copyCaptors; then 
-	uploadEventCaptors $captors $home 
+if $isUploadCaptorsDefined; then
+	captors $rootFolder '/home/kmantzoukas' $instances 
 fi
