@@ -35,9 +35,9 @@ import static net.bytebuddy.implementation.MethodDelegation.to;
 /*
 Main class that represents the java agent
  */
-public class DataIntegrityEverestEventCaptor {
+public class DataIntegrityEverestEventCaptorAgent {
 
-    final static Logger logger = Logger.getLogger(DataIntegrityEverestEventCaptor.class);
+    final static Logger logger = Logger.getLogger(DataIntegrityEverestEventCaptorAgent.class);
     private static EmitterType type;
     private static Properties properties = new Properties();
 
