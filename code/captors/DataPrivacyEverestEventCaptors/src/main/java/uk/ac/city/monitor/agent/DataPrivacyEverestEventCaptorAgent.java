@@ -19,9 +19,9 @@ import java.net.InetAddress;
 import java.util.Date;
 import java.util.Properties;
 
-public class DataPrivacyEverestEventCaptors {
+public class DataPrivacyEverestEventCaptorAgent {
 
-	final static Logger logger = Logger.getLogger(DataPrivacyEverestEventCaptors.class);
+	final static Logger logger = Logger.getLogger(DataPrivacyEverestEventCaptorAgent.class);
     private static EmitterType type;
     private static Properties properties = new Properties();
 

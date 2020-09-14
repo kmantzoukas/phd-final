@@ -29,19 +29,19 @@ import javax.xml.datatype.DatatypeFactory;
 import java.io.*;
 import java.lang.instrument.Instrumentation;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class EventCaptorAgent implements Serializable {
+public class DataAvailabilityEverestEventCaptorAgent implements Serializable {
 
-    final static Logger logger = Logger.getLogger(EventCaptorAgent.class);
+    final static Logger logger = Logger.getLogger(DataAvailabilityEverestEventCaptorAgent.class);
     private static EmitterType type;
     private static Properties properties = new Properties();
 
     public static void premain(String configuration, Instrumentation instrumentation) throws IOException {
 
+        long start = new Date().getTime();
         properties.load(new StringReader(configuration.replaceAll(",", "\n")));
         EmitterType emitterType = EmitterType.valueOf(properties.getProperty("emitter").toUpperCase());
 
@@ -127,6 +127,12 @@ public class EventCaptorAgent implements Serializable {
                 Install the Java agent
                  */
                 .installOn(instrumentation);
+
+        Emitter emitter = EventEmitterFactory.getInstance(emitterType, properties);
+        emitter.connect();
+        long end = new Date().getTime();
+        String ip = InetAddress.getLocalHost().getHostAddress();
+        emitter.send(String.format("%s, %s", ip, end - start));
 
         logger.info("Event captors has been successfully installed.");
 
