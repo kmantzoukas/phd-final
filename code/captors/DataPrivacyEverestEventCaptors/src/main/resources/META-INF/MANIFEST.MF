@@ -1,1 +1,1 @@
-Premain-Class: uk.ac.city.monitor.agent.DataPrivacyAgent
+Premain-Class: uk.ac.city.monitor.agent.DataPrivacyEverestEventCaptorAgent
