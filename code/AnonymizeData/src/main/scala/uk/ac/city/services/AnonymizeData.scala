@@ -12,7 +12,7 @@ object AnonymizeData {
 
   def main(args: Array[String]) {
 
-    val input = spark.sparkContext.textFile("gs://dataproc-staging-us-central1-658776204196-yztfnikr/input/measurements-demo-5000.txt", 8)
+    val input = spark.sparkContext.textFile(args(0), 8)
     input.map(m => {
       /*
       Read every line of the input and split it
@@ -41,7 +41,7 @@ object AnonymizeData {
       Return the same line with except for the name and surname that has been SHA-256 hashed
        */
       temp.mkString(" ")
-    }).saveAsTextFile("gs://dataproc-staging-us-central1-658776204196-yztfnikr/output/output-1")
+    }).saveAsTextFile(args(1))
 
     spark.stop
   }
