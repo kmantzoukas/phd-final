@@ -30,7 +30,7 @@ public class SocketEmitter extends Emitter {
             this.socket = new Socket(host,port);
             this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         } catch (IOException ioe) {
-            logger.info(ioe);
+            logger.error(ioe);
         }
 
     }
