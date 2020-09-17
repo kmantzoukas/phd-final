@@ -160,7 +160,10 @@ public class MonitoringUtilities {
         parameters.put("partId",  String.valueOf(partition.index()));
         parameters.put("ip",  String.valueOf(InetAddress.getLocalHost().getHostAddress()));
 
-        emitter.send(MonitoringUtilities.createEvent(operationId, properties.getProperty("eventStype"), OperationType.COMPUTE, parameters));
+        String event = MonitoringUtilities.createEvent(operationId, properties.getProperty("eventStype"), OperationType.COMPUTE, parameters);
+
+        if(event != null)
+            emitter.send(event);
 
         //emitter.send(createEventXML(operationId, OperationType.COMPUTE, parameters));
 
@@ -180,7 +183,7 @@ public class MonitoringUtilities {
 
         if("TEXT".equalsIgnoreCase(style)){
             event =  String.format("%s(%s)", type.name().toLowerCase(), parameters);
-        }else if("XML".equalsIgnoreCase(style)){
+        } else if("XML".equalsIgnoreCase(style)){
             event = MonitoringUtilities.createEventXML(operationId, type, arguments);
         }
 
