@@ -2,17 +2,20 @@ package uk.ac.city.services
 
 import java.math.BigInteger
 import java.security.MessageDigest
-
-import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.SparkSession
+import sys.process._
 
 object AnonymizeData {
 
-  val spark = SparkSession.builder.getOrCreate
+
 
   def main(args: Array[String]) {
 
-    val input = spark.sparkContext.textFile(args(0), 8)
+    "gsutil -m rm -r gs://dataproc-staging-us-central1-658776204196-yztfnikr/output/*" !
+
+    val spark = SparkSession.builder.getOrCreate
+
+    val input = spark.sparkContext.textFile(args(0), 20)
     input.map(m => {
       /*
       Read every line of the input and split it
@@ -41,7 +44,7 @@ object AnonymizeData {
       Return the same line with except for the name and surname that has been SHA-256 hashed
        */
       temp.mkString(" ")
-    }).saveAsTextFile(args(1))
+    })saveAsTextFile(args(1))
 
     spark.stop
   }
