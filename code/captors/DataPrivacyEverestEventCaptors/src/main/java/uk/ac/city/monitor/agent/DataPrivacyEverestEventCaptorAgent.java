@@ -101,8 +101,8 @@ public class DataPrivacyEverestEventCaptorAgent {
         emitter.connect();
         long end = new Date().getTime();
         String ip = InetAddress.getLocalHost().getHostAddress();
-        String hostname = InetAddress.getLocalHost().getHostName();
-        emitter.send(String.format("%s, %s, %s", hostname, ip, end - start));
+        String host = InetAddress.getLocalHost().getCanonicalHostName();
+        emitter.send(String.format("%s, %s -> %s", host, ip, end - start));
 
         logger.info("Event captors has been successfully installed.");
     }
