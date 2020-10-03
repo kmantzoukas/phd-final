@@ -160,7 +160,7 @@ public class MonitoringUtilities {
         parameters.put("partId",  String.valueOf(partition.index()));
         parameters.put("ip",  String.valueOf(InetAddress.getLocalHost().getHostAddress()));
 
-        String event = MonitoringUtilities.createEvent(operationId, properties.getProperty("eventStype"), OperationType.COMPUTE, parameters);
+        String event = MonitoringUtilities.createEvent(operationId, properties.getProperty("eventType"), OperationType.COMPUTE, parameters);
 
         if(event != null)
             emitter.send(event);
