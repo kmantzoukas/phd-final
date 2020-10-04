@@ -1,0 +1,56 @@
+version: '2' 
+services:
+  namenode:
+    image: bde2020/hadoop-namenode:1.1.0-hadoop2.8-java8
+    container_name: namenode
+    volumes:
+      - ./data/namenode:/hadoop/dfs/name
+    environment:
+      - CLUSTER_NAME=test
+    env_file:
+      - ./hadoop.env
+    ports:
+      - 50070:50070
+  datanode:
+    image: bde2020/hadoop-datanode:1.1.0-hadoop2.8-java8
+    depends_on: 
+      - namenode
+    volumes:
+      - ./data/datanode:/hadoop/dfs/data
+    env_file:
+      - ./hadoop.env
+    ports:
+      - 50075:50075
+  spark-master:
+    image: bde2020/spark-master:2.1.0-hadoop2.8-hive-java8
+    container_name: spark-master
+    ports:
+      - 8080:8080
+      - 7077:7077
+    env_file:
+      - ./hadoop.env
+    volumes:
+      - ../code/AnonymizeData/target/scala-2.11/anonymizedata_2.11-0.1.0-SNAPSHOT.jar:/data/bda/anonymizedata_2.11-0.1.0-SNAPSHOT.jar
+      - ../code/PrepareData/target/scala-2.11/anonymizedata_2.11-0.1.0-SNAPSHOT.jar:/data/bda/preparedata_2.11-0.1.0-SNAPSHOT.jar
+      - ../code/AnonymizeData/target/scala-2.11/anonymizedata_2.11-0.1.0-SNAPSHOT.jar:/data/bda/computeaverage_2.11-0.1.0-SNAPSHOT.jar
+      - ../code/captors/DataPrivacyEverestEventCaptors/target/DataPrivacyEverestEventCaptors.jar:/data/captors/DataPrivacyEverestEventCaptors.jar
+      - ../code/captors/DataIntegrityEverestEventCaptors/target/DataIntegrityEverestEventCaptors.jar:/data/captors/DataIntegrityEverestEventCaptors.jar
+      - ../code/captors/DataAvailabilityEverestEventCaptors/target/DataAvailabilityEverestEventCaptors.jar:/data/captors/DataAvailabilityEverestEventCaptors.jar
+      - ../code/EventCaptor/target/EventCaptor.jar:/data/captors/EventCaptor.jar
+  spark-worker:
+    image: bde2020/spark-worker:2.1.0-hadoop2.8-hive-java8
+    depends_on:
+      - spark-master
+    environment:
+      - SPARK_MASTER=spark://spark-master:7077
+      - SPARK_WORKER_CORES=1
+      - SPARK_WORKER_MEMORY=2g
+    env_file:
+      - ./hadoop.env
+    volumes:
+      - ../code/AnonymizeData/target/scala-2.11/anonymizedata_2.11-0.1.0-SNAPSHOT.jar:/data/bda/anonymizedata_2.11-0.1.0-SNAPSHOT.jar
+      - ../code/PrepareData/target/scala-2.11/anonymizedata_2.11-0.1.0-SNAPSHOT.jar:/data/bda/preparedata_2.11-0.1.0-SNAPSHOT.jar
+      - ../code/AnonymizeData/target/scala-2.11/anonymizedata_2.11-0.1.0-SNAPSHOT.jar:/data/bda/computeaverage_2.11-0.1.0-SNAPSHOT.jar
+      - ../code/captors/DataPrivacyEverestEventCaptors/target/DataPrivacyEverestEventCaptors.jar:/data/captors/DataPrivacyEverestEventCaptors.jar
+      - ../code/captors/DataIntegrityEverestEventCaptors/target/DataIntegrityEverestEventCaptors.jar:/data/captors/DataIntegrityEverestEventCaptors.jar
+      - ../code/captors/DataAvailabilityEverestEventCaptors/target/DataAvailabilityEverestEventCaptors.jar:/data/captors/DataAvailabilityEverestEventCaptors.jar  
