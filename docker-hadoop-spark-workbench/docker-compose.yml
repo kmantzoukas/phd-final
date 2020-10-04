@@ -31,8 +31,8 @@ services:
       - ./hadoop.env
     volumes:
       - ../code/AnonymizeData/target/scala-2.11/anonymizedata_2.11-0.1.0-SNAPSHOT.jar:/data/bda/anonymizedata_2.11-0.1.0-SNAPSHOT.jar
-      - ../code/PrepareData/target/scala-2.11/anonymizedata_2.11-0.1.0-SNAPSHOT.jar:/data/bda/preparedata_2.11-0.1.0-SNAPSHOT.jar
-      - ../code/AnonymizeData/target/scala-2.11/anonymizedata_2.11-0.1.0-SNAPSHOT.jar:/data/bda/computeaverage_2.11-0.1.0-SNAPSHOT.jar
+      - ../code/PrepareData/target/scala-2.11/preparedata_2.11-0.1.0-SNAPSHOT.jar:/data/bda/preparedata_2.11-0.1.0-SNAPSHOT.jar
+      - ../code/ComputeAverage/target/scala-2.11/computeaverage_2.11-0.1.0-SNAPSHOT.jar:/data/bda/computeaverage_2.11-0.1.0-SNAPSHOT.jar
       - ../code/captors/DataPrivacyEverestEventCaptors/target/DataPrivacyEverestEventCaptors.jar:/data/captors/DataPrivacyEverestEventCaptors.jar
       - ../code/captors/DataIntegrityEverestEventCaptors/target/DataIntegrityEverestEventCaptors.jar:/data/captors/DataIntegrityEverestEventCaptors.jar
       - ../code/captors/DataAvailabilityEverestEventCaptors/target/DataAvailabilityEverestEventCaptors.jar:/data/captors/DataAvailabilityEverestEventCaptors.jar
@@ -49,8 +49,8 @@ services:
       - ./hadoop.env
     volumes:
       - ../code/AnonymizeData/target/scala-2.11/anonymizedata_2.11-0.1.0-SNAPSHOT.jar:/data/bda/anonymizedata_2.11-0.1.0-SNAPSHOT.jar
-      - ../code/PrepareData/target/scala-2.11/anonymizedata_2.11-0.1.0-SNAPSHOT.jar:/data/bda/preparedata_2.11-0.1.0-SNAPSHOT.jar
-      - ../code/AnonymizeData/target/scala-2.11/anonymizedata_2.11-0.1.0-SNAPSHOT.jar:/data/bda/computeaverage_2.11-0.1.0-SNAPSHOT.jar
+      - ../code/PrepareData/target/scala-2.11/preparedata_2.11-0.1.0-SNAPSHOT.jar:/data/bda/preparedata_2.11-0.1.0-SNAPSHOT.jar
+      - ../code/ComputeAverage/target/scala-2.11/computeaverage_2.11-0.1.0-SNAPSHOT.jar:/data/bda/computeaverage_2.11-0.1.0-SNAPSHOT.jar
       - ../code/captors/DataPrivacyEverestEventCaptors/target/DataPrivacyEverestEventCaptors.jar:/data/captors/DataPrivacyEverestEventCaptors.jar
       - ../code/captors/DataIntegrityEverestEventCaptors/target/DataIntegrityEverestEventCaptors.jar:/data/captors/DataIntegrityEverestEventCaptors.jar
       - ../code/captors/DataAvailabilityEverestEventCaptors/target/DataAvailabilityEverestEventCaptors.jar:/data/captors/DataAvailabilityEverestEventCaptors.jar  
