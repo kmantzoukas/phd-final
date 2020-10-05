@@ -252,13 +252,16 @@ public class DataAvailabilityEverestEventCaptorAgent implements Serializable {
             Emitter emitter = EventEmitterFactory.getInstance(type, properties);
             emitter.connect();
 
-            emitter.send(createEventXML(operationId, OperationType.ACTION,"start", applicationId, applicationName, rdd, null));
-            Object[] result = m.invoke(new Object[]{rdd, f, classTag});
-            emitter.send(createEventXML(operationId, OperationType.ACTION,"end", applicationId, applicationName, rdd, null));
+            if("NONE".equals(properties.getProperty("eventType"))) {
+                emitter.send(createEventXML(operationId, OperationType.ACTION,"start", applicationId, applicationName, rdd, null));
+                Object[] result = m.invoke(new Object[]{rdd, f, classTag});
+                emitter.send(createEventXML(operationId, OperationType.ACTION,"end", applicationId, applicationName, rdd, null));
+                emitter.close();
 
-            emitter.close();
+                return result;
+            }
 
-            return result;
+            return null;
         }
     }
 
