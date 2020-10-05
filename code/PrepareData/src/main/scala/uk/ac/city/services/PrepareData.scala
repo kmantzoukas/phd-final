@@ -1,10 +1,8 @@
 package uk.ac.city.services
 
-import java.math.BigInteger
-import java.security.MessageDigest
-
-import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.SparkSession
+
+import scala.sys.process._
 
 object PrepareData {
 
@@ -12,7 +10,9 @@ object PrepareData {
 
   def main(args: Array[String]) {
 
-    val input = spark.sparkContext.textFile("gs://dataproc-staging-us-central1-658776204196-yztfnikr/output/output-1",8)
+    "hdfs dfs -rm -r " + "/user/root/output/2"!
+
+    val input = spark.sparkContext.textFile(args(0), args(2).toInt)
     
     input
     .flatMap({
@@ -27,7 +27,7 @@ object PrepareData {
 
           List(refrigerator,stove,kettle,television,heater).toList
     })
-    .saveAsTextFile("gs://dataproc-staging-us-central1-658776204196-yztfnikr/output/output-2")
+    .saveAsTextFile(args(1))
 
     spark.stop
   }
