@@ -28,7 +28,7 @@ object PrepareData {
           val kettle = ((id, "KETTLE"), items(5).toDouble)
           val television = ((id, "TELEVISION"), items(6).toDouble)
 
-          List(refrigerator,stove,kettle,television).toList
+          List(refrigerator,stove,kettle,television)
     })
     .saveAsTextFile(outputFile)
 
