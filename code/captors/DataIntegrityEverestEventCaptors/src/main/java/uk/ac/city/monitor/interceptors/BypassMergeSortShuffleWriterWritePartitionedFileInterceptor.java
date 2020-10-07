@@ -87,7 +87,8 @@ public class BypassMergeSortShuffleWriterWritePartitionedFileInterceptor {
                         parameters.put("reduceId",  String.valueOf(i));
                         parameters.put("checksum", DatatypeConverter.printHexBinary(md.digest()));
                         parameters.put("length", String.valueOf(bytes.length));
-                        emitter.send(MonitorUtilities.createEvent(operationId, properties.getProperty("eventStype"), OperationType.WRITESHUFFLE, parameters));
+                        String event = MonitorUtilities.createEvent(operationId, properties.getProperty("eventStype"), OperationType.WRITESHUFFLE, parameters);
+                        emitter.send(event);
 
                         lengths[i] = Utils.copyStream(in, out, false, transferToEnabled);
                         copyThrewException = false;

@@ -108,7 +108,9 @@ public class ExternalSorterWritePartitionedFileInterceptor {
                 parameters.put("checksum", DatatypeConverter.printHexBinary(md.digest()));
 
                 long operationId = MonitorUtilities.generateRandomLong();
-                emitter.send(MonitorUtilities.createEvent(operationId, properties.getProperty("eventStype"), OperationType.WRITESHUFFLE, parameters));
+                String event = MonitorUtilities.createEvent(operationId, properties.getProperty("eventStype"), OperationType.WRITESHUFFLE, parameters);
+                if(event != null)
+                    emitter.send(event);
                 emitter.close();
             }
         }else {

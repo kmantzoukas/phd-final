@@ -56,7 +56,7 @@ public class DataIntegrityMonitorableIterator<A> extends AbstractIterator<A> {
             parameters.put("checksum", DatatypeConverter.printHexBinary(md.digest()));
             String event = MonitorUtilities.createEvent(operationId, properties.getProperty("eventType"), operation, parameters);
             if (event != null)
-                emitter.send(MonitorUtilities.createEvent(operationId, properties.getProperty("eventType"), operation, parameters));
+                emitter.send(event);
             emitter.close();
             return false;
         } else {
