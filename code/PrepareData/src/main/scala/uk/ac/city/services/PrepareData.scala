@@ -23,13 +23,12 @@ object PrepareData {
       item =>
           val items = item.split(" ")
           val id:String = items(0)
-          val refrigerator = ((id, "REFRIGERATOR"), items(4).toDouble)
-          val stove = ((id, "STOVE"), items(5).toDouble)
-          val kettle = ((id, "KETTLE"), items(6).toDouble)
-          val television= ((id, "TELEVISION"), items(7).toDouble)
-          val heater = ((id, "HEATER"), items(8).toDouble)
+          val refrigerator = ((id, "REFRIGERATOR"), items(3).toDouble)
+          val stove = ((id, "STOVE"), items(4).toDouble)
+          val kettle = ((id, "KETTLE"), items(5).toDouble)
+          val television = ((id, "TELEVISION"), items(6).toDouble)
 
-          List(refrigerator,stove,kettle,television,heater).toList
+          List(refrigerator,stove,kettle,television).toList
     })
     .saveAsTextFile(outputFile)
 
