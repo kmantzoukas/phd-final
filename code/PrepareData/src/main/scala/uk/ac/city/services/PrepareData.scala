@@ -10,9 +10,13 @@ object PrepareData {
 
   def main(args: Array[String]) {
 
-    "hdfs dfs -rm -r " + "/user/root/output/2"!
+    val inputFile = args(0)
+    val outputFile = args(1)
+    val numOfPartitions = args(2).toInt
 
-    val input = spark.sparkContext.textFile(args(0), args(2).toInt)
+    "hdfs dfs -rm -r " + outputFile!
+
+    val input = spark.sparkContext.textFile(inputFile, numOfPartitions)
     
     input
     .flatMap({
@@ -27,7 +31,7 @@ object PrepareData {
 
           List(refrigerator,stove,kettle,television,heater).toList
     })
-    .saveAsTextFile(args(1))
+    .saveAsTextFile(outputFile)
 
     spark.stop
   }

@@ -9,11 +9,15 @@ object AnonymizeData {
 
   def main(args: Array[String]) {
 
-    "hdfs dfs -rm -r " + "/user/root/output/1"!
+    val inputFile = args(0)
+    val outputFile = args(1)
+    val numOfPartitions = args(2).toInt
+
+    "hdfs dfs -rm -r " + inputFile!
 
     val spark = SparkSession.builder.getOrCreate
 
-    val input = spark.sparkContext.textFile(args(0), args(2).toInt)
+    val input = spark.sparkContext.textFile(inputFile, numOfPartitions)
     input.map(m => {
       /*
       Read every line of the input and split it
@@ -42,7 +46,7 @@ object AnonymizeData {
       Return the same line as the original except for the name and surname that has been SHA-256 hashed
        */
       temp.mkString(" ")
-    }).saveAsTextFile(args(1))
+    }).saveAsTextFile(outputFile)
 
     spark.stop
   }
