@@ -7,10 +7,8 @@ import net.bytebuddy.implementation.bind.annotation.This;
 import org.apache.spark.SparkEnv$;
 import org.apache.spark.TaskContext;
 import org.apache.spark.rdd.RDD;
-import scala.Function1;
 import scala.Function2;
 import scala.collection.Iterator;
-import scala.runtime.AbstractFunction1;
 import scala.runtime.AbstractFunction2;
 import uk.ac.city.monitor.enums.EmitterType;
 import uk.ac.city.monitor.enums.OperationType;
@@ -22,7 +20,6 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.function.Function;
 
 public class SparkContextRunJobInterceptor implements Serializable{
 
