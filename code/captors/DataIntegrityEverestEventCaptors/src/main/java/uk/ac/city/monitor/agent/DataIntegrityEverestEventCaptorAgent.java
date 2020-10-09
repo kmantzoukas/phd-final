@@ -166,10 +166,10 @@ public class DataIntegrityEverestEventCaptorAgent {
             /*
             Element matcher for class org.apache.spark.SparkContext
             */
-            .type(type -> type.getName().equals("org.apache.spark.SparkContext"))
-            /*
+           /* .type(type -> type.getName().equals("org.apache.spark.SparkContext"))
+            *//*
             Intercept all calls on SparkContext.runJob() method
-            */
+            *//*
             .transform((builder, typeDescription, classLoader, module) -> {
                 return builder
                     .serialVersionUid(1L)
@@ -178,7 +178,7 @@ public class DataIntegrityEverestEventCaptorAgent {
                         .withDefaultConfiguration()
                         .withBinders(Morph.Binder.install(Morpher.class))
                         .to(new SparkContextRunJobInterceptor(type, properties)));
-             })
+             })*/
             /*
             Install the Java agent
              */
