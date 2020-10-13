@@ -6,9 +6,9 @@ import scala.sys.process._
 
 object ComputeAverage {
 
-  val spark = SparkSession.builder.getOrCreate
-
   def main(args: Array[String]) {
+
+    val spark = SparkSession.builder.getOrCreate
 
     val inputFile = args(0)
     val outputFile = args(1)
