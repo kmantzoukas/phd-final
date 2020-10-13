@@ -13,7 +13,7 @@ object AnonymizeData {
     val outputFile = args(1)
     val numOfPartitions = args(2).toInt
 
-    "hdfs dfs -rm -r " + outputFile!
+    /*"hdfs dfs -rm -r " + outputFile!*/
 
     val spark = SparkSession.builder.getOrCreate
 
