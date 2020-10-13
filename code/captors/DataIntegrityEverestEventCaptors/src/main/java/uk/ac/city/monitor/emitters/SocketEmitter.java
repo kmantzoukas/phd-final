@@ -18,7 +18,7 @@ public class SocketEmitter extends Emitter {
     private Socket socket;
     private BufferedWriter writer;
 
-    public SocketEmitter(Properties props){
+    public SocketEmitter(Properties props) {
         this.properties = props;
         this.host = properties.getProperty("host");
         this.port = Integer.valueOf(properties.getProperty("port"));
@@ -27,7 +27,7 @@ public class SocketEmitter extends Emitter {
     @Override
     public void connect() {
         try {
-            this.socket = new Socket(host,port);
+            this.socket = new Socket(host, port);
             this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         } catch (IOException ioe) {
             logger.info(ioe);
@@ -37,14 +37,14 @@ public class SocketEmitter extends Emitter {
 
     @Override
     public void close() {
-        try{
+        try {
             if (socket != null)
                 socket.close();
-            if (writer != null){
+            if (writer != null) {
                 writer.flush();
                 writer.close();
             }
-        }catch (IOException ioe){
+        } catch (IOException ioe) {
             logger.error(ioe);
         }
 

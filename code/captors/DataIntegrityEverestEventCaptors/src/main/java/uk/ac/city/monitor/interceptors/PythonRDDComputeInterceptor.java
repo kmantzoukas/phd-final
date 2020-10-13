@@ -32,7 +32,7 @@ public class PythonRDDComputeInterceptor {
     }
 
     @RuntimeType
-    public  Iterator<byte[]> compute(
+    public Iterator<byte[]> compute(
             @Argument(0) Partition split,
             @Argument(1) TaskContext context,
             @This RDD rdd,
@@ -43,7 +43,7 @@ public class PythonRDDComputeInterceptor {
         String applicationId = SparkEnv$.MODULE$.get().conf().get("spark.app.id");
         String applicationName = SparkEnv$.MODULE$.get().conf().get("spark.app.name");
 
-        Map<String,String> readParams = new LinkedHashMap<>();
+        Map<String, String> readParams = new LinkedHashMap<>();
         readParams.put("appId", applicationId);
         readParams.put("appName", applicationName);
         readParams.put("rddId", String.valueOf(rdd.firstParent(rdd.elementClassTag()).id()));
@@ -59,7 +59,7 @@ public class PythonRDDComputeInterceptor {
 
         PythonRunner runner = PythonRunner.apply(((PythonFunction) func), bufferSize, reuseWorker);
 
-        Map<String,String> writeParams = new LinkedHashMap<>();
+        Map<String, String> writeParams = new LinkedHashMap<>();
         writeParams.put("appId", applicationId);
         writeParams.put("appName", applicationName);
         writeParams.put("rddId", String.valueOf(rdd.id()));

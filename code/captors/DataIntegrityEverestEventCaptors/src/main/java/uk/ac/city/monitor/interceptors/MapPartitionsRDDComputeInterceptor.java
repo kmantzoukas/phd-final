@@ -24,7 +24,7 @@ public class MapPartitionsRDDComputeInterceptor {
     private final EmitterType type;
     private final Properties properties;
 
-    public MapPartitionsRDDComputeInterceptor(EmitterType type, Properties properties){
+    public MapPartitionsRDDComputeInterceptor(EmitterType type, Properties properties) {
         this.type = type;
         this.properties = properties;
     }
@@ -38,7 +38,7 @@ public class MapPartitionsRDDComputeInterceptor {
         String applicationId = SparkEnv$.MODULE$.get().conf().get("spark.app.id");
         String applicationName = SparkEnv$.MODULE$.get().conf().get("spark.app.name");
 
-        Map<String,String> readParams = new LinkedHashMap<>();
+        Map<String, String> readParams = new LinkedHashMap<>();
         readParams.put("appId", applicationId);
         readParams.put("appName", applicationName);
         readParams.put("rddId", String.valueOf(rdd.firstParent(rdd.elementClassTag()).id()));
@@ -52,7 +52,7 @@ public class MapPartitionsRDDComputeInterceptor {
                         OperationType.READRDD,
                         readParams);
 
-        Map<String,String> writeParams = new LinkedHashMap<>();
+        Map<String, String> writeParams = new LinkedHashMap<>();
         writeParams.put("appId", applicationId);
         writeParams.put("appName", applicationName);
         writeParams.put("rddId", String.valueOf(rdd.id()));

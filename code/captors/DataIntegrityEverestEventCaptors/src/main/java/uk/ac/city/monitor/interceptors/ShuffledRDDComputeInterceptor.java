@@ -24,7 +24,7 @@ public class ShuffledRDDComputeInterceptor {
     private final EmitterType type;
     private final Properties properties;
 
-    public ShuffledRDDComputeInterceptor(EmitterType type, Properties properties){
+    public ShuffledRDDComputeInterceptor(EmitterType type, Properties properties) {
         this.properties = properties;
         this.type = type;
     }
@@ -39,7 +39,7 @@ public class ShuffledRDDComputeInterceptor {
         String applicationId = SparkEnv$.MODULE$.get().conf().get("spark.app.id");
         String applicationName = SparkEnv$.MODULE$.get().conf().get("spark.app.name");
 
-        Map<String,String> parameters = new LinkedHashMap<>();
+        Map<String, String> parameters = new LinkedHashMap<>();
         parameters.put("appId", applicationId);
         parameters.put("appName", applicationName);
         parameters.put("rddId", String.valueOf(rdd.id()));

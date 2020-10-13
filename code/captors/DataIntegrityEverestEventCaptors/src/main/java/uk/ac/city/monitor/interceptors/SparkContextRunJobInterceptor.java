@@ -21,12 +21,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 
-public class SparkContextRunJobInterceptor implements Serializable{
+public class SparkContextRunJobInterceptor implements Serializable {
 
     private final EmitterType type;
     private final Properties properties;
 
-    public SparkContextRunJobInterceptor(EmitterType type, Properties properties){
+    public SparkContextRunJobInterceptor(EmitterType type, Properties properties) {
         this.type = type;
         this.properties = properties;
     }
@@ -42,23 +42,18 @@ public class SparkContextRunJobInterceptor implements Serializable{
         String applicationId = SparkEnv$.MODULE$.get().conf().get("spark.app.id");
         String applicationName = SparkEnv$.MODULE$.get().conf().get("spark.app.name");
 
-            /*
-            Custom Scala function that creates a data integrity monitorable iterator and passes it
-            along in the runJob() method to compute the hashes for the data that each iterator
-            reads during the execution of the action
-             */
-        final class Func extends AbstractFunction2<TaskContext , Iterator, Object> implements Serializable {
+        final class Func extends AbstractFunction2<TaskContext, Iterator, Object> implements Serializable {
 
             @Override
             public Object apply(TaskContext context, Iterator it) {
 
-                Map<String,String> parameters = new LinkedHashMap<>();
+                Map<String, String> parameters = new LinkedHashMap<>();
                 parameters.put("appId", applicationId);
                 parameters.put("appName", applicationName);
                 parameters.put("rddId", String.valueOf(rdd.id()));
                 parameters.put("partitionId", String.valueOf(context.getPartitionId()));
 
-                return  f.apply(context, new DataIntegrityMonitorableIterator(it, type, properties, OperationType.READRDD, parameters));
+                return f.apply(context, new DataIntegrityMonitorableIterator(it, type, properties, OperationType.READRDD, parameters));
             }
 
         }

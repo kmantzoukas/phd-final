@@ -34,7 +34,7 @@ public class BypassMergeSortShuffleWriterWritePartitionedFileInterceptor {
     private final EmitterType type;
     private final Properties properties;
 
-    public BypassMergeSortShuffleWriterWritePartitionedFileInterceptor(EmitterType type, Properties properties){
+    public BypassMergeSortShuffleWriterWritePartitionedFileInterceptor(EmitterType type, Properties properties) {
         this.type = type;
         this.properties = properties;
     }
@@ -59,11 +59,11 @@ public class BypassMergeSortShuffleWriterWritePartitionedFileInterceptor {
 
         MessageDigest md = MessageDigest.getInstance("MD5");
 
-        Map<String, String > parameters = new LinkedHashMap<>();
+        Map<String, String> parameters = new LinkedHashMap<>();
         parameters.put("appId", applicationId);
         parameters.put("appName", applicationName);
         parameters.put("shuffleId", String.valueOf(shuffleId));
-        parameters.put("mapId",  String.valueOf(mapId));
+        parameters.put("mapId", String.valueOf(mapId));
 
         final long[] lengths = new long[numPartitions];
         if (partitionWriters == null) {
@@ -84,7 +84,7 @@ public class BypassMergeSortShuffleWriterWritePartitionedFileInterceptor {
                         md.update(bytes);
 
                         long operationId = MonitorUtilities.generateRandomLong();
-                        parameters.put("reduceId",  String.valueOf(i));
+                        parameters.put("reduceId", String.valueOf(i));
                         parameters.put("checksum", DatatypeConverter.printHexBinary(md.digest()));
                         parameters.put("length", String.valueOf(bytes.length));
                         String event = MonitorUtilities.createEvent(operationId, properties.getProperty("eventType"), OperationType.WRITESHUFFLE, parameters);

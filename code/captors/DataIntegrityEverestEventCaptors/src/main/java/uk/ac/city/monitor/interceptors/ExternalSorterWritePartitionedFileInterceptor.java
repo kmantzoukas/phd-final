@@ -37,7 +37,7 @@ public class ExternalSorterWritePartitionedFileInterceptor {
     private final EmitterType type;
     private final Properties properties;
 
-    public ExternalSorterWritePartitionedFileInterceptor(EmitterType type, Properties properties){
+    public ExternalSorterWritePartitionedFileInterceptor(EmitterType type, Properties properties) {
         this.type = type;
         this.properties = properties;
     }
@@ -71,7 +71,7 @@ public class ExternalSorterWritePartitionedFileInterceptor {
                                 fileBufferSize * 1024,
                                 context.taskMetrics().shuffleWriteMetrics());
 
-        if(((ExternalSorter)sorter).numSpills() == 0){
+        if (((ExternalSorter) sorter).numSpills() == 0) {
             WritablePartitionedPairCollection collection = aggregator.isDefined() ? map : buffer;
 
             Iterator<Tuple2<Tuple2<Integer, K>, C>> sortedIterator =
@@ -82,12 +82,12 @@ public class ExternalSorterWritePartitionedFileInterceptor {
 
             MessageDigest md = MessageDigest.getInstance("MD5");
 
-            while(sortedIterator.hasNext()){
+            while (sortedIterator.hasNext()) {
 
                 Tuple2<Tuple2<Integer, K>, C> cur = sortedIterator.next();
                 int partitionId = cur._1()._1();
 
-                while (sortedIterator.hasNext() && cur._1()._1() == partitionId){
+                while (sortedIterator.hasNext() && cur._1()._1() == partitionId) {
                     md.update(new Tuple2(cur._1()._2(), cur._2()).toString().getBytes());
                     writer.write(cur._1()._2(), cur._2());
                     cur = sortedIterator.next();
@@ -99,31 +99,31 @@ public class ExternalSorterWritePartitionedFileInterceptor {
                 Emitter emitter = EventEmitterFactory.getInstance(type, properties);
                 emitter.connect();
 
-                Map<String, String > parameters = new LinkedHashMap<>();
+                Map<String, String> parameters = new LinkedHashMap<>();
                 parameters.put("appId", applicationId);
                 parameters.put("appName", applicationName);
-                parameters.put("shuffleId", String.valueOf(((ShuffleBlockId)blockId).shuffleId()));
-                parameters.put("mapId",  String.valueOf(((ShuffleBlockId)blockId).mapId()));
-                parameters.put("reduceId",  String.valueOf(partitionId));
+                parameters.put("shuffleId", String.valueOf(((ShuffleBlockId) blockId).shuffleId()));
+                parameters.put("mapId", String.valueOf(((ShuffleBlockId) blockId).mapId()));
+                parameters.put("reduceId", String.valueOf(partitionId));
                 parameters.put("checksum", DatatypeConverter.printHexBinary(md.digest()));
 
                 long operationId = MonitorUtilities.generateRandomLong();
                 String event = MonitorUtilities.createEvent(operationId, properties.getProperty("eventType"), OperationType.WRITESHUFFLE, parameters);
-                if(event != null)
+                if (event != null)
                     emitter.send(event);
                 emitter.close();
             }
-        }else {
-            Iterator<Tuple2<Integer, Iterator<Product2>>> partitionedIterator = ((ExternalSorter)sorter).partitionedIterator();
+        } else {
+            Iterator<Tuple2<Integer, Iterator<Product2>>> partitionedIterator = ((ExternalSorter) sorter).partitionedIterator();
 
-            while(partitionedIterator.hasNext()){
+            while (partitionedIterator.hasNext()) {
                 Tuple2 tuple = partitionedIterator.next();
 
                 Integer id = (Integer) tuple._1();
-                Iterator<Product2> elements = (Iterator<Product2>)tuple._2();
+                Iterator<Product2> elements = (Iterator<Product2>) tuple._2();
 
-                if(elements.hasNext()){
-                    while(elements.hasNext()){
+                if (elements.hasNext()) {
+                    while (elements.hasNext()) {
                         Product2 elem = elements.next();
                         writer.write(elem._1(), elem._2());
                     }
@@ -135,9 +135,9 @@ public class ExternalSorterWritePartitionedFileInterceptor {
         }
 
         writer.close();
-        context.taskMetrics().incMemoryBytesSpilled(((ExternalSorter)sorter).memoryBytesSpilled());
-        context.taskMetrics().incDiskBytesSpilled(((ExternalSorter)sorter).diskBytesSpilled());
-        context.taskMetrics().incPeakExecutionMemory(((ExternalSorter)sorter).peakMemoryUsedBytes());
+        context.taskMetrics().incMemoryBytesSpilled(((ExternalSorter) sorter).memoryBytesSpilled());
+        context.taskMetrics().incDiskBytesSpilled(((ExternalSorter) sorter).diskBytesSpilled());
+        context.taskMetrics().incPeakExecutionMemory(((ExternalSorter) sorter).peakMemoryUsedBytes());
 
         return lengths;
     }

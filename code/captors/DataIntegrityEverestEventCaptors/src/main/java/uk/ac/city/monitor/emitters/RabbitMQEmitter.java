@@ -33,7 +33,7 @@ public class RabbitMQEmitter extends Emitter {
             factory.setPassword(properties.getProperty("password"));
             this.connection = factory.newConnection();
             channel = this.connection.createChannel();
-            channel.exchangeDeclare(properties.getProperty("channel"),"direct");
+            channel.exchangeDeclare(properties.getProperty("channel"), "direct");
             channelName = properties.getProperty("channel");
             topic = properties.getProperty("topic");
         } catch (IOException ioe) {
@@ -55,7 +55,7 @@ public class RabbitMQEmitter extends Emitter {
     @Override
     public void send(String event) {
         try {
-            if(!connection.isOpen())
+            if (!connection.isOpen())
                 this.connect();
             channel.basicPublish(channelName, topic, null, event.getBytes());
         } catch (IOException ioe) {

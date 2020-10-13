@@ -8,7 +8,9 @@ public abstract class Emitter {
     public Properties properties = new Properties();
 
     public abstract void connect();
+
     public abstract void close();
+
     public abstract void send(String event);
 
 }

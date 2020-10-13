@@ -6,15 +6,15 @@ import java.util.Properties;
 
 public class EventEmitterFactory {
 
-    private EventEmitterFactory EventEmitterFactory(){
+    private EventEmitterFactory EventEmitterFactory() {
         return new EventEmitterFactory();
     }
 
-    public static Emitter getInstance(EmitterType type, Properties props){
+    public static Emitter getInstance(EmitterType type, Properties props) {
 
         Emitter emitter = null;
 
-        switch (type){
+        switch (type) {
             case RABBITMQ:
                 emitter = new RabbitMQEmitter(props);
                 break;
