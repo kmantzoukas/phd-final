@@ -14,7 +14,7 @@ object ComputeAverage {
     val outputFile = args(1)
     val numOfPartitions = args(2).toInt
 
-    "hdfs dfs -rm -r " + outputFile!
+   /* "hdfs dfs -rm -r " + outputFile! */
 
     val createCombiner = (c:Double) => (c,1)
     val mergeValue = (acc:(Double, Int), c:Double) => (acc._1 + c, acc._2 + 1)
