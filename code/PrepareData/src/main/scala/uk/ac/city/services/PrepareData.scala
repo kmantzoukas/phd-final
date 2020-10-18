@@ -14,7 +14,7 @@ object PrepareData {
     val outputFile = args(1)
     val numOfPartitions = args(2).toInt
 
-    "hdfs dfs -rm -r " + outputFile!
+    /*"hdfs dfs -rm -r " + outputFile!*/
 
     val input = spark.sparkContext.textFile(inputFile, numOfPartitions)
     
